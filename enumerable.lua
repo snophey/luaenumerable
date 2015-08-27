@@ -8,14 +8,8 @@ local enum = function(t)
 end
 
 function enums:each(fn)
-  for _,v in ipairs(self.table) do
-    fn(v)
-  end
-end
-
-function enums:each_with_index(fn)
   for i,v in ipairs(self.table) do
-    fn(i,v)
+    fn(v,i)
   end
 end
 
@@ -47,5 +41,15 @@ function enums:map(fn)
   end
   return enum(t)
 end
+
+function enums:reduce(fn, init)
+  local acc = init or 0
+  for i,v in ipairs(self.table) do
+    acc = fn(acc,v,i)
+  end
+  return acc
+end
+enums.fold = enums.reduce
+enums.inject = enums.reduce
 
 return enum
