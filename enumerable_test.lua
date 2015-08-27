@@ -73,4 +73,38 @@ describe("enumerable test", function()
     local res = enum(strs):reduce(function(acc, e) return (acc .. e) end, "")
     assert.are.equal("Hello World!", res)
   end)
+
+  it("should check if condition is true for all elements", function()
+    local arr = {10, 20, 30, 55, 13, 23.09}
+    local res = enum(arr):all(function(e) return e >= 10 end)
+    assert.is_true(res)
+    
+    arr = {1,2,3,4,5,6,7,8,9,0}
+    res = enum(arr):all(function(e) return e >= 10 end)
+    assert.is_false(res)
+  end)
+
+  it("should check if condition is true for at least one element", function()
+    local arr = {10, 20, 30, 55, 13, 23.09, 8}
+    local res = enum(arr):any(function(e) return e < 10 end)
+    assert.is_true(res)
+
+    arr = {10, 20, 30, 55, 13, 23.09}
+    res = enum(arr):any(function(e) return e < 10 end)
+    assert.is_false(res)
+  end)
+
+  it("should count elements that meet the requirements", function()
+    local arr = {10, 20, 30, 55, 13, 23.09, 8}
+    local res = enum(arr):count(function(e) return e > 20 end)
+    assert.are.equal(3, res)
+
+    arr = {"cat", "dog", "pig"}
+    res = enum(arr):count(function(e) return #e >= 4 end)
+    assert.are.equal(0, res)
+
+    str = "abcdefg"
+    res = enum(str):count(function(e) return e > "f" end)
+    assert.are.equal(1, res)
+  end)
 end)
